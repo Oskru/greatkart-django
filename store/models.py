@@ -1,5 +1,6 @@
 from cgi import print_exception
 from email.mime import image
+from pyexpat import model
 from django.db import models
 from django.urls import reverse
 from category.models import Category
@@ -25,4 +26,3 @@ class Product(models.Model):
 
     def __str__(self):
         return self.product_name
-
