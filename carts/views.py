@@ -6,7 +6,16 @@ from .models import Cart, CartItem
 
 # Create your views here.
 
+def smth(request):
+    return 1
+
 def _cart_id(request):
+    """
+    If the session key exists, return it. If it doesn't exist, create it and return it
+    
+    :param request: The request object that is passed to the view
+    :return: The cart id is being returned.
+    """
     cart = request.session.session_key
 
     if not cart:
@@ -15,6 +24,16 @@ def _cart_id(request):
 
 
 def cart(request, total=0, quantity=0, cart_items=None):
+    """
+    It gets the cart, gets the cart items, calculates the total, quantity, tax, and grand total, and
+    then passes all of that to the template
+    
+    :param request: The request object
+    :param total: The total cost of all the items in the cart, defaults to 0 (optional)
+    :param quantity: The total number of items in the cart, defaults to 0 (optional)
+    :param cart_items: This is a list of all the items in the cart
+    :return: The cart.html template is being rendered with the context.
+    """
 
     try:
         cart = Cart.objects.get(cart_id=_cart_id(request))
@@ -41,6 +60,14 @@ def cart(request, total=0, quantity=0, cart_items=None):
 
 
 def add_cart(request, product_id):
+    """
+    If the cart exists, add the product to the cart. If the cart doesn't exist, create a new cart and
+    add the product to the cart
+    
+    :param request: The request object
+    :param product_id: The id of the product that is being added to the cart
+    :return: The cart_id is being returned.
+    """
     product = Product.objects.get(id=product_id)  # Get the product
 
     try:
@@ -68,6 +95,15 @@ def add_cart(request, product_id):
 
 
 def remove_cart(request, product_id):
+    """
+    If the quantity of the product in the cart is greater than 1, then subtract 1 from the quantity and
+    save the cart item. Otherwise, delete the cart item
+    
+    :param request: The request object is a Django object that contains metadata about the request sent
+    to the server
+    :param product_id: The id of the product to be removed from the cart
+    :return: The cart_item.quantity is being returned.
+    """
 
     cart = Cart.objects.get(cart_id=_cart_id(request))
     product = get_object_or_404(Product, id=product_id)
@@ -83,6 +119,14 @@ def remove_cart(request, product_id):
 
 
 def remove_cart_item(request, product_id):
+    """
+    It gets the cart and the product, then deletes the cart item
+    
+    :param request: The request object is passed to the view by Django. It contains metadata about the
+    request, including the HTTP method
+    :param product_id: The id of the product to be removed from the cart
+    :return: The cart_item is being deleted and the user is being redirected to the cart page.
+    """
     cart = Cart.objects.get(cart_id=_cart_id(request))
     product = get_object_or_404(Product, id=product_id)
     cart_item = CartItem.objects.get(product=product, cart=cart)
