@@ -6,9 +6,6 @@ from .models import Cart, CartItem
 
 # Create your views here.
 
-def smth(request):
-    return 1
-
 def _cart_id(request):
     """
     If the session key exists, return it. If it doesn't exist, create it and return it
